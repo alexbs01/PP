@@ -7,7 +7,7 @@ let is_prime n =
 let is_prime2 n = 
     let rec check_from i =
         (float_of_int i) >= (sqrt(float_of_int n)) +. 1. || (* Criba de Eratostenes*)
-        (n mod i != 0 && check_from (i + 1))
+        (n mod i <> 0 && check_from (i + 1))
     in check_from 2
 
 let rec next_prime n = (* Calcula el próximo número primo usando la función is_prime *)
@@ -29,7 +29,7 @@ let rec last_prime_to2 n = (* Calcula el anterior primer al recibido por teclado
 let numArgumentos = Array.length Sys.argv
 
 let main = 
-    if numArgumentos != 2 then print_endline "Número de parámetros incorrecto"
+    if numArgumentos <> 2 then print_endline "Número de parámetros incorrecto"
     else print_endline("Siguiente primo con next_prime2\t\t" ^ string_of_int( next_prime2( int_of_string( Array.get Sys.argv(1) ) ) ) );
 		 print_endline("Siguiente primo con next_prime\t\t" ^  string_of_int( next_prime( int_of_string( Array.get Sys.argv(1) ) ) ) );
 		 print_endline("Anterior primo con last_prime_to2\t" ^ string_of_int( last_prime_to2( int_of_string( Array.get Sys.argv(1) ) ) ) );

@@ -8,7 +8,7 @@ let rec calculoSiguienteNumero n =
     else calculoSiguienteNumero(n-1) ^ "\n" ^ string_of_int(fib(n));;	
 
 let rec mensaje = 
-    if (Array.length Sys.argv)=2
+    if (Array.length Sys.argv) = 2
     then (calculoSiguienteNumero (int_of_string(Sys.argv.(1))))
     else ("Número de argumentos incorrecto") in
     print_endline mensaje;;
