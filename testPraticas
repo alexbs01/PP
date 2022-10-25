@@ -1,39 +1,56 @@
 #!/bin/bash
 
+echo "Comprobando errores en:"
+
 cd p1
+echo "Practica 1"
 ocamlc -o nombre nombre.ml
 ocamlc -c expr1.ml
 ocamlc -c expr2.mli expr2.ml
-rm nombre
+rm nombre *.cmo *cmi
 cd ..
 
 cd p2
+echo "Practica 2"
 ocamlc -o pi pi.ml
 ocamlc -o e e.ml
 ocamlc -o fact fact.ml
-rm pi e fact
+rm pi e fact  *.cmo *cmi
 cd ..
 
 cd p3
+echo "Practica 3"
 ocamlc -c ej31.mli ej31.ml
 ocamlc -c condis.ml
 ocamlc -c ej33.mli ej33.ml
 ocamlc -o fib fib.ml
 ocamlc -c prime.mli prime.ml
-rm fib
+rm fib *.cmo *cmi
 cd ..
 
 cd p4
+echo "Practica 4"
 ocamlc -c ej41.mli ej41.ml
 ocamlc -c power.mli power.ml
 ocamlc -c mcd.mli mcd.ml
+rm *.cmo *cmi
 cd ..
 
 cd p5
+echo "Practica 5"
 ocamlc -c collatz.mli collatz.ml
+rm *.cmo *cmi
 cd ..
 
 cd p6
+echo "Practica 6"
 ocamlc -c powmod.mli powmod.ml
 ocamlc -c ej62.mli ej62.ml
+rm *.cmo *cmi
+cd ..
+
+cd p7
+echo "Practica 7"
+ocamlc -c mylist.mli mylist.ml
+rm *.cmo *cmi
 cd ..
