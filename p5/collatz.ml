@@ -16,7 +16,7 @@ let rec top n =
 (* Con la función max podemos averiguar cual de dos números es el más grande *)
 	
 let rec length'n'top n =
-    if n = 1  then (0,1)
+    if n = 1 then (0,1)
     else let largo, maximo = length'n'top (f n)
     in (largo + 1, max n maximo)
 	

@@ -4,7 +4,7 @@ let curry =  function c -> function a -> function b -> c (a,b)
 let curry c a b = c (a,b)
 
 (* uncurry : (('a -> ('b -> 'c) -> ('a * 'b) -> 'c)) *)
-let uncurry =  function c -> function (a,b) -> c a b
+let uncurry = function c -> function (a,b) -> c a b
 let uncurry c(a,b) = c a b
 
 (* ----- *)
@@ -44,9 +44,8 @@ h 1, h 2, h 3;
 
 (* comp : ('a -> 'b) -> ('c -> 'a) -> ('c -> 'b) *)
 
-let comp = function (function a -> b) -> c
+let comp = function f -> function g -> function c -> f (g c);;
 
-
-
+let f = let square x = x * x in comp square ((+) 1);;
 
 
