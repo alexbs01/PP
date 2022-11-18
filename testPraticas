@@ -54,3 +54,10 @@ echo "Practica 7"
 ocamlc -c mylist.mli mylist.ml
 rm *.cmo *cmi
 cd ..
+
+cd p8
+echo "Practica 8"
+ocamlc -c mylist2.mli mylist2.ml
+ocamlc -c mylist3.mli mylist3.ml
+rm *.cmo *cmi
+cd ..

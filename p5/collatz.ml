@@ -20,13 +20,14 @@ let rec length'n'top n =
     else let largo, maximo = length'n'top (f n)
     in (largo + 1, max n maximo)
 	
-let rec longest_in m n=
-    let rec aux i=
+let rec longest_in m n =
+    let rec aux i =
         if i <= m then (m, length m)
         else 
 			let (j, lengthJ) = aux (i - 1) in
 			let lengthI = length i in
-				if lengthJ >= lengthI then (j, lengthJ) else (i, lengthI)
+				if lengthJ >= lengthI then (j, lengthJ)
+				else (i, lengthI)
     in (aux n)
 	
 let rec highest_in m n=
@@ -47,11 +48,3 @@ let rec highest_in m n =
 			if topI > topJ then (i, topI) 
 			else (j, topJ)
       in (aux n)
-
-	
-	
-	
-	
-	
-	
-	

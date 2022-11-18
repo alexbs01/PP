@@ -1,36 +1,39 @@
 (* Retorna el primer elemento de la lista *)
 let hd l = match l with
 	| header::_ -> header
-	| [] -> raise(Failure "Fallo de hd")
+	| [] -> raise(Failure "hd")
 	
 (* Retorna la cola de una lista, todos los elementos menos el primero *)
 let tl l = match l with
 	| _::tail -> tail
-	| [] -> raise(Failure "Fallo de tl")
+	| [] -> raise(Failure "tl")
 
 (* Cuenta los elementos de una lista *)	
-let rec length = function
-	[] -> 0
-	| _::tail -> 1 + length tail
+let length l =
+    let rec aux a = function
+        [] -> a
+        | head::tail -> aux (a + 1) tail
+    in aux 0 l
 
 (* Comapra que lista es más larga *)	
 let rec compare_lengths l1 l2 =
 	match l1, l2 with
+		([],[]) -> 0
 		| ([], _) -> -1
 		| (_, []) -> 1
 		| (_::t1, _::t2) -> compare_lengths t1 t2
 		
-(* Retorna el n-esimo elemento de l*)
+(* Retorna el n-esimo elemento de l *)
 let rec nth l n = 
-	if n < 0 
-	then raise(Invalid_argument "n debe ser mayor a 0")
-	else let rec count = function
-		([], _) -> raise(Failure "nth")
-		| (first::_, 0) -> first
-		| (_::t, n) -> count(t, n - 1)
-	in count(l, n)
+	if(n = 0) 
+	then hd l 
+	else if(n > 0) 
+		 then nth (tl l)(n-1)
+		 else if(n < 0) 
+			  then raise (Invalid_argument "List.nth")
+			  else raise (Failure "nth")
 	
-(* Concatena l1 con l2*)
+(* Concatena l1 con l2 *)
 let rec append l1 l2 = 
 	if l1 = []
 	then l2
@@ -41,7 +44,9 @@ let rec append l1 l2 =
 (* Retornará el primer elemento impar de lista *)
 let rec find p = function
     [] -> raise Not_found
-    | header::tail -> if p header then header else find p tail
+    | header::tail -> if p header 
+					  then header 
+					  else find p tail
 
 (* Comprueba que todos los elementos de la lista cumplen la condicón p *)
 let rec for_all p = function
@@ -58,8 +63,8 @@ let rec mem n = function
     [] -> false
     | header::tail -> 
 		if(n = header) 
-			then true
-			else (mem n tail);;
+		then true
+		else (mem n tail);;
 
 (* Retorna una lista donde todos los elementos cumplen la condición p *)
 let rec filter p = function
@@ -97,7 +102,7 @@ let rec combine l1 l2 =
 	[], [] -> []
 	| header1::tail1, header2::tail2 -> 
 		(header1, header2) :: (combine (tail1) (tail2))
-		| _ -> raise (Invalid_argument "Fallo de combine");;
+		| _ -> raise (Invalid_argument "combine");;
 
 (* Retorna una lista dada la vuelta *)
 let rec rev = function
