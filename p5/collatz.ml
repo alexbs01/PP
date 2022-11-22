@@ -29,16 +29,6 @@ let rec longest_in m n =
 				if lengthJ >= lengthI then (j, lengthJ)
 				else (i, lengthI)
     in (aux n)
-	
-let rec highest_in m n=
-    let rec aux i =
-        if i <= m then (m, length m)
-        else 
-			let (j, lengthJ) = aux (i - 1) in
-			let lengthI = length i in
-				if lengthJ >= lengthI then (j, lengthJ) 
-				else (i, lengthI)
-    in (aux n)
 
 let rec highest_in m n =
     let rec aux i =
@@ -47,4 +37,4 @@ let rec highest_in m n =
 			let topI = top i in
 			if topI > topJ then (i, topI) 
 			else (j, topJ)
-      in (aux n)
+    in (aux n)
