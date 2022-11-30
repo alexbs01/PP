@@ -4,11 +4,8 @@
 		else n :: to0from (n-1);; *)
 
 let to0from n = 
-	let rec aux l i =
-		if i < 0 
-		then List.rev l
-		else aux (i::l) (i - 1)
-	in aux [] n
+	List.rev (List.init (n + 1) (function x -> x))
+
 
 
 (* let rec fromto m n =
@@ -24,8 +21,23 @@ let fromto m n =
 	in aux [] n
 
 
+
 (* let incseg l =
 		List.fold_right (fun x t -> x::List.map ((+) x) t) l [];; *)
+  
+let sum l =
+  let rec aux acc = function
+    | [] -> acc
+    | h::t -> aux (acc+h) t
+  in
+  aux 0 l
+  
+let incseg l =
+let rec aux ll =
+[]->[]
+| head::tail -> sum ll & aux tail
+in aux [];;
+	
 
 
 
