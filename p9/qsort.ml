@@ -1,10 +1,12 @@
- (* Aunque no sea una función propia del paradigma funcional, no queda otra que 
+(* Aunque no sea una función propia del paradigma funcional, no queda otra que 
 	usarla para generar números aleatorios *)
 let rec generar_lista_aleatoria n acc max =
   if n = 0 then acc
   else generar_lista_aleatoria (n - 1) (Random.int max :: acc) max
 
-(* Este algoritmo funcionará mejor cuando la lista esté ya casi ordenada *)
+(* Este algoritmo funcionará mejor cuando la lista esté ya casi ordenada,
+ por lo que si está ordenado de forma descendente o esté de forma aleatoria
+ no será la mejor opción *)
 let rec qsort1 ord = function
 	[] -> []
 	| h::t -> let after, before = List.partition (ord h) t in
