@@ -2,70 +2,100 @@
 
 echo "Comprobando errores en de compilación en:"
 
-cd p1
+cd p01
 echo "Practica 1"
 ocamlc -o nombre nombre.ml
 ocamlc -c expr1.ml
 ocamlc -c expr2.mli expr2.ml
-rm nombre *.cmo *cmi
+rm nombre *.cmo *.cmi
 cd ..
 
-cd p2
+cd p02
 echo "Practica 2"
 ocamlc -o pi pi.ml
 ocamlc -o e e.ml
 ocamlc -o fact fact.ml
-rm pi e fact  *.cmo *cmi
+rm pi e fact  *.cmo *.cmi
 cd ..
 
-cd p3
+cd p03
 echo "Practica 3"
 ocamlc -c ej31.mli ej31.ml
 ocamlc -c condis.ml
 ocamlc -c ej33.mli ej33.ml
 ocamlc -o fib fib.ml
 ocamlc -c prime.mli prime.ml
-rm fib *.cmo *cmi
+rm fib *.cmo *.cmi
 cd ..
 
-cd p4
+cd p04
 echo "Practica 4"
 ocamlc -c ej41.mli ej41.ml
 ocamlc -c power.mli power.ml
 ocamlc -c mcd.mli mcd.ml
-rm *.cmo *cmi
+rm *.cmo *.cmi
 cd ..
 
-cd p5
+cd p05
 echo "Practica 5"
 ocamlc -c collatz.mli collatz.ml
-rm *.cmo *cmi
+rm *.cmo *.cmi
 cd ..
 
-cd p6
+cd p06
 echo "Practica 6"
 ocamlc -c powmod.mli powmod.ml
 ocamlc -c ej62.mli ej62.ml
-rm *.cmo *cmi
+rm *.cmo *.cmi
 cd ..
 
-cd p7
+cd p07
 echo "Practica 7"
 ocamlc -c mylist.mli mylist.ml
-rm *.cmo *cmi
+rm *.cmo *.cmi
 cd ..
 
-cd p8
+cd p08
 echo "Practica 8"
 ocamlc -c mylist2.mli mylist2.ml
 ocamlc -c mylist3.mli mylist3.ml
-rm *.cmo *cmi
+rm *.cmo *.cmi
 cd ..
 
-cd p9
+cd p09
 echo "Practica 9"
 ocamlc -c ej91.mli ej91.ml
 ocamlc -c qsort.mli qsort.ml
 ocamlc -c msort.mli msort.ml
-rm *.cmo *cmi
+ocamlc -o fact fact.ml
+rm fact *.cmo *.cmi
 cd ..
+
+cd p10
+echo "Practica 10"
+ocamlc -c tour.mli tour.ml
+ocamlc -c shortest.mli shortest.ml
+rm *.cmo *.cmi
+cd ..
+
+cd p11
+echo "Practica 11"
+ocamlc -c g_tree.mli g_tree.ml
+ocamlc -c g_tree.cmo breadth_first.mli breadth_first.ml
+ocamlc -c bin_tree.mli bin_tree.ml
+ocamlc -c bin_tree.cmo tsort.mli tsort.ml
+rm *.cmo *.cmi
+cd ..
+
+cd p12
+echo "Practica 12"
+make all 
+ocamlc -c context.mli context.ml
+ocamlc -c lib.mli lib.ml
+ocamlc -c arith.mli arith.ml
+ocamlc -c command.mli command.ml
+ocamlc -c main.ml
+ocamlc -o calc context.cmo lib.cmo arith.cmo command.cmo parser.cmo lexer.cmo main.cmo
+make clean
+cd ..
+
