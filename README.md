@@ -430,3 +430,128 @@ array;; (* Después de ejecutar la otra línea, quedará así *)
 - : int array = [|1; 2; 3; 4; 5; 6; 7; 8; 10|]
 ```
 
+-----
+
+## Programación Orientada a Objetos
+
+La programación orientada a objetos en OCaml funciona de una manera muy similar a la de Java. Hay clases que generan objetos con los atributos y métodos, pero hay una distinciones importantes.  
+
+- Existen **dos tipos de objetos**
+
+  - **De clase**: Son objetos normales que se crean a partir de una clase como en Java, tienen su atributos y métodos própios.
+
+  - **Inmediatos**: Son objetos sin clase, también tienen sus propios atributos y métodos. Se pueden crear con valores por defecto o con los valores que queramos a partir de funciones factoría.
+
+- Los atributos están **obligados a tener un valor por defecto**.
+
+- No tienen un método constructor, es **la propia clase la que crea los objetos**.
+
+Estructura de una clase.  
+
+```ocaml
+class <identificador> [<parametros>] =
+object(<alias>)
+	(* Atributos y métodos *)
+end;;
+```
+
+- **Identficador**: Será el nombre de la clase.
+- **Parámetros**: Son los parámetros que recibe la clase para construir el objetos.
+- **Alias**: Es el nombre que vamos a dar para referirnos a la propia clase. Esto en Java serías el ```this```, pero en OCaml somos nosotros como programadores los que debemos escoger que palabra debemos escoger nosotros para referirnos a la propia clase.
+
+Siguiendo los apuntes de clase, vamos hacer una clase que genere puntos en un plano de dos dimensiones:
+
+```ocaml
+class point2D (xInit, yInit) (* coords. del punto *) =	
+object (self)
+	(* Variables, coordenadas XX' e YY' *)
+	val mutable x = xInit
+	val mutable y = yInit
+
+	(* Metodos*)
+	(* getters acceso a coord. *)
+	method get_x = x
+	method get_y = y
+
+	(* setters asignacion coord. *)
+	method set_x x' = x<-x'
+	method set_y y' = y<-y'
+	
+	(* reasignar coordenadas de forma absoluta o relativa *)
+	method moveto (x',y') = x<-x'; y<-y'
+	method rmoveto (dx,dy) = self#moveto(x + dx, y + dy)
+
+	(* toString() *)
+	method to_string () = "("^(string_of_int x)^", "^(string_of_int y)^")"
+
+end;;
+
+class point2D :
+  	int * int ->
+  	object
+    	val mutable x : int
+    	val mutable y : int
+    	method get_x : int
+    	method get_y : int
+    	method moveto : int * int -> unit
+   		method rmoveto : int * int -> unit
+   	 method set_x : int -> unit
+    method set_y : int -> unit
+    method to_string : unit -> string
+  end
+```
+
+Y ahora vamos a analizar el código:
+
+- **Variables**: Se declaran con la palabra reservada ```val```. **Por defecto** son **inmutables**, esto quiere decir que el valor que tienen por defecto no se puede cambiar, como si fuera un atributo final de Java. **Para** hacer que sí se pueda **modificar cada atributo** debemos añadir en su declaración ```mutable```.
+
+- **Métodos**: Se declaran con la palabra reservada ```method```. Como en otros lenguajes orientados a objetos, también tenemos getters, setters y métodos normales.
+  - **Getters**: No tienen ningún parámetro de entrada porque no hace falta, simplemente retornan un valor como ```method get_x = x```.
+  - **Setters**: Necesitan un parámetro para actualizar atributos, esta actualización se realiza con el operador de asignación visto en los arrays, ```method set_y nuevaY = y<-nuevaY```.
+  - **Métodos**: Son métodos normales como en Java, una diferencia es que cuando queremos referirnos a la propia clase, a la hora de utilizar el alias, se utiliza poniendo un **#**. ```method moveto (x',y') = x<-x'; y<-y'``` y ```method rmoveto (dx,dy) = self#moveto(x + dx, y + dy)```.
+
+### Herencia
+
+Siguiendo con paradigma de la programación orientada a objetos y el ejemplo de clase, uno base de la OOP, es la herencia de clases, donde podemos crear nuevos objetos que compartan atributos y métodos. Cabe destacar que en OCaml a diferencia de Java, existe la herencia múltiple, permitiéndonos hacer que una clase herede de más de una a la vez.  
+
+Para el ejemplo vamos hacer una clase point2Deq, que tendrá a mayores un método equals para comparar dos puntos:
+
+```ocaml
+class point2Deq (x_init, y_init) = 
+object (self: 'self)
+	inherit point2D (x_init, y_init)
+
+	method equals (o: 'self) = (o#get_x = self#get_x) && (o#get_y = self#get_y)
+end;;
+```
+
+Ahora mismo, la clase point2Deq hereda todos los métodos hechos antes en point2D, esta herencia se hace con la palabra reservada ```inherit```, el tipo de herencia de OCaml es distinto al de Java, es como si todo lo que escribiéramos en una clase, lo copiáramos y pegásemos en las que heredan de ella. Este es el motivo por el cual debemos escribir un segundo self, uno para referimos a la clase actual, y otro para el padre.  
+
+### Objetos inmediatos
+
+Son objetos sin clase, un ejemplo para un objeto de una coordenada unidimensional, sería:
+
+```ocaml
+let o1d =
+      object
+        	val mutable x = 0
+        	method get_x = x
+        	method rmoveto d' = x <- x + d'
+end;;
+```
+
+Como podemos ver, este objeto o1d, se crea con un valor por defecto en la variable x, y tal como está hecho, no podemos inicializar el objeto con otro valor en la x. Para hacer esto, existen las **funciones factoría**, que permiten crear objetos sin clase y llamarlos a partir de variables.  
+
+```ocaml
+let factoria_pinmediato1D (xinit:int) = 
+  	object
+    	val mutable x = xinit
+    	method get_x = x
+    	method rmoveto d' = x <- x + d'
+end;;
+- val factoria_pinmediato1D : int -> < get_x : int; rmoveto : int -> unit > = <fun>
+
+let i5 = factoria_pinmediato1D 5
+- val i5 : < get_x : int; rmoveto : int -> unit > = <obj>
+```
+
