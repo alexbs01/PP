@@ -555,3 +555,23 @@ let i5 = factoria_pinmediato1D 5
 - val i5 : < get_x : int; rmoveto : int -> unit > = <obj>
 ```
 
+### Agregación
+
+Se trata de crear un nuevo objetos que se crea a partir de otros objetos. Siguiendo con las coordenadas, podemos hacer una clase arista que sea el resultado de unir dos puntos del plano.
+
+```ocaml
+class edge2D (a: point2D) (b: point2D) = (* Poniendo los :, podemos obligar que a y b sean objetos poi*)
+      object
+      	val vertexes = (a,b)
+      	method get_vertexes = vertexes     
+end;;
+
+class edge2D :
+  	point2D ->
+  	point2D ->
+  	object
+    	val vertexes : point2D * point2D
+    	method get_vertexes : point2D * point2D
+end
+```
+
