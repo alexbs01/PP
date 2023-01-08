@@ -1,4 +1,3 @@
-
 type 'a bin_tree =
     Empty
   | Node of 'a * 'a bin_tree * 'a bin_tree

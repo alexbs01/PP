@@ -204,6 +204,24 @@ else "c"
 
 -----
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Funciones
 
 Estructura:  
@@ -245,6 +263,24 @@ let y = 1+2 in ((function x -> x+x) y)
 ```
 
 -----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Funciones recursivas
 
@@ -309,6 +345,7 @@ let secHd = function (* - : string = "gato" *)
 
 ```ocaml
 let animales = ["perro"; "gato"; "vaca"; "cerdo"; "oveja"]
+
 length l : Número de elementos de una lista, List.length animales = 5
 hd l: Primer elemento de una lista
 tl l: Una lista entera sin su primer elemento
@@ -328,17 +365,10 @@ find f l: Retorna el primer elemento que satisface al predicado f
 filter f l: Devuelve una lista con solo los elementos que cumplen el predicado f
 split a: Divide una lista de pares en dos listas, no es terminal
 combine l1 l2: Transforma dos listas en una lista de pares, no es terminal
+assoc a l: Busca la clave a en la lista l, y retorna su valor en una lista de pares cartesianos
 ```
 
 -----
-
-
-
-
-
-
-
-
 
 ## Tipos de datos
 
@@ -459,6 +489,14 @@ end;;
 - **Parámetros**: Son los parámetros que recibe la clase para construir el objetos.
 - **Alias**: Es el nombre que vamos a dar para referirnos a la propia clase. Esto en Java serías el ```this```, pero en OCaml somos nosotros como programadores los que debemos escoger que palabra debemos escoger nosotros para referirnos a la propia clase.
 
+
+
+
+
+
+
+
+
 Siguiendo los apuntes de clase, vamos hacer una clase que genere puntos en un plano de dos dimensiones:
 
 ```ocaml
@@ -575,3 +613,500 @@ class edge2D :
 end
 ```
 
+-----
+
+## Prácticas
+
+Factorial
+
+```ocaml
+let rec fact = function (* Calula el factorial de un número de forma recursiva *)
+	0 -> 1
+	| n -> n * fact (n - 1)
+
+let numArgumentos = Array.length Sys.argv (* Contamos cuantos argumentos hay *)
+
+let main = (* Si no son dos, retorna un error *)
+    if numArgumentos <> 2 then print_endline "Número de parámetros incorrecto"
+    else print_endline(string_of_int( fact( int_of_string( Array.get Sys.argv(1) ) ) ) )
+	(* Para imprimir pasamos el string a entero, calculamos el factorial de ese número,
+		y lo pasamos a string de nuevo para imprimirlo por pantalla *)
+		
+(* Otra opción *)
+let rec fact = function (* Calcula el factorial *)
+	0 -> 1 
+  | n -> n * fact (n - 1);;
+  
+try (* Se intenta ejecutar este código que puede dar error *)
+	print_endline (string_of_int (fact (int_of_string Sys.argv.(1))))	
+with (* Si no puede busca el error que es y ejecuta el siguiente código *)
+  | Stack_overflow
+  | Invalid_argument _ 
+  | Failure _ -> print_endline "argumento invalido"
+```
+
+
+
+
+
+Fibonacci
+
+```ocaml
+let rec fib n =
+	if n <= 1 then n
+	else fib (n-1) + fib (n-2)
+	
+let rec calculoSiguienteNumero n =
+    if n = 0
+    then "0"
+    else calculoSiguienteNumero(n-1) ^ "\n" ^ string_of_int(fib(n));;	
+
+let rec mensaje = 
+    if (Array.length Sys.argv) = 2
+    then (calculoSiguienteNumero (int_of_string(Sys.argv.(1))))
+    else ("Número de argumentos incorrecto") in
+    print_endline mensaje;;
+```
+
+Ejercicio 41, suma de cifras, numero de cifras, exp10, reverso de un número y palíndromos
+
+```ocaml
+let rec sum_cifras n = (* sum_cifras 1234 -> 10 *)
+	if n = 0 
+	then 0
+	else n mod 10 + sum_cifras (n / 10)
+	 
+let rec num_cifras n = (* num_cifras 1234 -> 4 *)
+	if n = 0 
+	then 0
+	else 1 + num_cifras (n / 10)
+	
+let rec exp10 n = (* exp10 3 -> 1000 *)
+	if n = 0 
+	then 1
+	else 10 * exp10 (n - 1)
+
+let rec reverse n = (* reverse 1234 -> 4321 *)
+	if n = 0 
+	then 0
+	else (n mod 10) * exp10 (num_cifras n - 1) + reverse (n / 10)
+
+let rec palindromo s = (* palindromo vaca -> false ;; palindromo abba -> true *)
+	let rec counter i =
+		if i >= (String.length s - i) 
+		then true
+		else if s.[i] <> s.[String.length s - i - 1] 
+			 then false
+			 else counter (i + 1)
+	in counter 0
+
+val sum_cifras : int -> int
+val num_cifras : int -> int
+val exp10 : int -> int
+val reverse : int -> int
+val palindromo : string -> bool
+```
+
+Potencias
+
+```ocaml
+let rec power x y = 
+	if y = 0 then 1
+	else x * power x (y - 1)
+	
+let rec power' x y = 
+    if y = 0 then 1 
+    else if (y mod 2 = 0) then power' (x * x) (y / 2)
+    else x * power' (x * x) (y / 2)
+(* La función power' es más eficiente que la primera, porque por cada
+	iteriación que da el valor del exponente y se reduce a la mitad
+	y no solo en 1 como en power *)
+	
+let rec powerf x y = 
+    if y = 0 then 1. 
+    else if (y mod 2 = 0) then powerf (x*.x) (y / 2)
+    else x *. powerf (x *. x) (y / 2)
+(* Solo hay que poner que las x sean valores flotantes *)
+
+val power : int -> int -> int
+val power' : int -> int -> int
+val powerf : float -> int -> float
+```
+
+Ejercicio 62, curry, uncurry
+
+```ocaml
+(* curry : (('a * 'b) -> 'c) -> ('a -> ('b -> 'c)) *)
+let curry =  function c -> function a -> function b -> c (a,b)
+let curry c a b = c (a,b)
+
+(* uncurry : (('a -> ('b -> 'c) -> ('a * 'b) -> 'c)) *)
+let uncurry = function c -> function (a,b) -> c a b
+let uncurry c(a,b) = c a b
+
+(* ----- *)
+
+(* uncurry (+); *)
+(* Devolverá lo que hace uncurry *)
+
+let sum = (uncurry (+))
+(* Se almacena en sum, lo que hace uncurry *)
+
+(* sum 1;; *)
+(* Retornará un error porque necesita dos parámetros *)
+
+(* sum (2,1); *)
+(* Devolverá 3, porque en la línea de let sum, indicamos que queremos 
+   hacer una suma *)
+
+let g = curry (function p -> 2 * fst p + 3 * snd p)
+(* Almacena en g, lo que queremos hacer con curry *)
+(* fst retorna el primer elemento de una pareja *)
+(* snd retornar el segundo elemento de una pareja *)
+
+(* g (2,5); *)
+(* Debería dar un error por no recibir el tipo de dato correcto *)
+
+let h = g 2
+(* En h, metemos la operación de g 2 *)
+
+(* h 1, h 2, h 3;; *)
+(* 	h 1 = g 2 1 = 2 * 2 + 3 * 1 = 7
+	h 2 = g 2 2 = 2 * 2 + 3 * 2 = 10
+	h 3 = g 2 3 = 2 * 2 + 3 * 3 = 13  *)
+	
+(*	h 1, h 2, h 3 = (7, 10, 13)  *)
+
+(* ----- *)
+
+(* comp : ('a -> 'b) -> ('c -> 'a) -> ('c -> 'b) *)
+let comp = function f -> function g -> function c -> f (g c)
+
+let f = let square x = x * x in comp square ((+) 1)
+
+let i = function a -> a;;
+let j = function (a, b) -> a;;
+let k = function (a, b) -> b;;
+let l = function a -> [a];;
+
+val curry : ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+val sum : int * int -> int
+val g : int -> int -> int
+val h : int -> int
+
+val comp : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+val f : int -> int
+
+val i : 'a -> 'a
+val j : 'a * 'b -> 'a
+val k : 'a * 'b -> 'b
+val l : 'a -> 'a list
+```
+
+Potencia modular
+
+```ocaml
+let rec powmod m b e =
+    let restoMB = b mod m
+	in if e > 0
+	then if (e mod 2) = 0
+		then powmod m (restoMB * restoMB) (e / 2) mod m
+		else restoMB * powmod m (restoMB * restoMB) ((e - 1) / 2) mod m
+	else 1
+
+val powmod : int -> int -> int -> int
+```
+
+Tipos de datos de las funciones del módulo List:
+
+```ocaml
+val hd : 'a list -> 'a
+val tl : 'a list -> 'a list
+val length : 'a list -> int
+val compare_lengths : 'a list -> 'b list -> int
+val nth : 'a list -> int -> 'a
+val append : 'a list -> 'a list -> 'a list
+val init : int -> (int -> 'a) -> 'a list
+val rev : 'a list -> 'a list
+val rev_append : 'a list -> 'a list -> 'a list
+val concat : 'a list list -> 'a list
+val flatten : 'a list list -> 'a list
+val map : ('a -> 'b) -> 'a list -> 'b list
+val rev_map : ('a -> 'b) -> 'a list -> 'b list
+val map2 : ('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list
+val fold_left : ('a -> 'b -> 'a) -> 'a -> 'b list -> 'a
+val fold_right : ('a -> 'b -> 'b) -> 'a list -> 'b -> 'b
+val find : ('a -> bool) -> 'a list -> 'a
+val for_all : ('a -> bool) -> 'a list -> bool
+val exists : ('a -> bool) -> 'a list -> bool
+val mem : 'a -> 'a list -> bool
+val filter : ('a -> bool) -> 'a list -> 'a list
+val find_all : ('a -> bool) -> 'a list -> 'a list
+val partition : ('a -> bool) -> 'a list -> 'a list * 'a list
+val split : ('a * 'b) list -> 'a list * 'b list
+val combine : 'a list -> 'b list -> ('a * 'b) list
+```
+
+Ejercicio 91, to0from, fromto, incseg, remove, compress
+
+```ocaml
+let to0from n = (* to0from 4 -> [4; 3; 2; 1; 0] *)
+	List.rev (List.init (n + 1) (function x -> x))
+
+let fromto m n = (* fromto 2 5 -> [2; 3; 4; 5] *)
+	let rec aux l i =
+		if i < m 
+		then l
+		else aux (i::l) (i - 1)
+	in aux [] n
+
+let incseg l = (* incseg [1; 2; 3; 4] -> [1; 3; 6; 10] *)
+	let rec aux l acc l2 = match l with
+      	 [] -> []
+		| [head] -> List.rev ((head + acc)::l2)
+    	| head::tail -> aux tail (head + acc) ((head + acc)::l2)
+ 	 in aux l 0 []
+	
+let remove x l = (* remove 2 [1; 2; 3; 2; 4] -> [1; 3; 2; 4] *)
+	let rec aux acc = function
+    	[] -> l | 
+		head::tail -> if x = head 
+					 then List.rev_append acc tail
+            		  else aux (head::acc) tail 
+    in aux [] l
+
+let compress l = (* compress [1; 1; 2; 2; 2; 3; 3; 3; 2] -> [1; 2; 3; 2]*)
+  let rec aux acc l = match l with
+        | head1::head2::tail -> if head1=head2 
+        					  then aux acc (head2::tail)
+                       		    else aux (head1::acc) (head2::tail)
+        | [head] -> aux (head::acc) []
+        | []-> List.rev acc
+  in (aux [] l);;
+  
+val to0from : int -> int list
+val fromto : int -> int -> int list
+val incseg : int list -> int list
+val remove : 'a -> 'a list -> 'a list
+val compress : 'a list -> 'a list
+```
+
+Merge sort y qsort
+
+```ocaml
+let merge' ord (l1, l2) =
+	let rec aux (a1, a2) mer = match a1, a2 with
+		[], l | l, [] -> List.rev_append mer l
+		| head1::tail1, head2::tail2 -> if ord head1 head2 
+										then aux (tail1, head2::tail2) (head1::mer)
+										else aux (head1::tail1, tail2) (head2::mer)
+	in aux (l1, l2) [];;
+	
+let rec qsort2 ord =
+	let append' l1 l2 = List.rev_append (List.rev l1) l2 
+		in function
+			[] -> []
+			| h::t -> let after, before = List.partition (ord h) t in
+			append' (qsort2 ord before) (h :: qsort2 ord after)	
+	
+val merge' : ('a -> 'a -> bool) -> 'a list * 'a list -> 'a list
+val qsort2 : ('a -> 'a -> bool) -> 'a list -> 'a list
+```
+
+Árboles binarios
+
+```ocaml
+type 'a bin_tree =
+    Empty
+	| Node of 'a * 'a bin_tree * 'a bin_tree;;
+
+let map_tree f tree =
+	let rec aux = function
+		| Empty -> Empty
+		| Node (x, l, r) -> Node (f x, aux l, aux r)
+	in aux tree
+
+let rec fold_tree f a = function
+    Empty -> a
+	| Node (x, l, r) -> f x (fold_tree f a l) (fold_tree f a r)
+
+let rec sum t = 
+	fold_tree(fun a b c-> a + b + c) 0 t
+
+let rec prod t = 
+	fold_tree(fun a b c-> a *. b*. c) 1. t
+
+let rec size t = 
+	fold_tree(fun a b c-> 1 + b + c) 0 t
+
+let height tree =
+	let rec aux = function
+		| Empty -> 0
+		| Node (_, l, r) -> 1 + max (aux l) (aux r)
+	in aux tree
+
+let rec inorder t = 
+	fold_tree(fun a b c -> b @ [a] @ c) [] t
+
+let rec mirror t = 
+	fold_tree(fun a b c -> Node(a, c, b)) Empty t
+(*-----------------------*)
+type 'a bin_tree =
+    Empty
+  | Node of 'a * 'a bin_tree * 'a bin_tree
+
+val map_tree : ('a -> 'b) -> 'a bin_tree -> 'b bin_tree
+(* devuelve el bin_tree resultante de aplicar una función a cada unos de sus nodos *)
+
+val fold_tree : ('a -> 'b -> 'b -> 'b) -> 'b -> 'a bin_tree -> 'b
+(* generaliza operaciones de reducción sobre valores de tipo bin_tree *)
+
+val sum : int bin_tree -> int
+(* devuelve la suma de los nodos de un int bin_tree *)
+
+val prod : float bin_tree -> float
+(* devuelve el producto de los nodos de un float bin_tree *)
+
+val size : 'a bin_tree -> int
+(* devuelve el número de nodos de un bin_tree *)
+
+val height : 'a bin_tree -> int
+(* devuelve la altura de un bin_tree *)
+
+val inorder : 'a bin_tree -> 'a list
+(* devuelve la lista de nodos de un bin_tree en "orden" *)
+
+val mirror : 'a bin_tree -> 'a bin_tree
+(* devuelve la imagen especular de un bin_tree *)
+```
+
+GTree, un árbol que tiene como hijo una lista de arboles GTree
+
+```ocaml
+type 'a g_tree =
+  Gt of 'a * 'a g_tree list;;
+
+let rec size = function 
+	Gt (_, []) -> 1
+	| Gt (r, h::t) -> size h + size (Gt (r, t))
+
+let size tree =
+  let rec aux = function
+    | Gt (_, hijo) ->
+        1 + List.fold_left (fun acc t -> acc + aux t) 0 hijo
+  in aux tree
+
+let height tree =
+  let rec aux = function
+    | Gt (_, hijo) ->
+        if hijo = [] 
+		then 1
+        else 1 + List.fold_left max 0 (List.map aux hijo)
+		
+  in aux tree
+
+let leaves tree =
+	let rec aux acc = function
+		| Gt (x, hijo) ->
+			if hijo = [] 
+			then x :: acc
+			else List.fold_left aux acc hijo
+			
+	in aux [] tree
+
+let mirror tree =
+	let rec aux = function
+		| Gt (x, hijo) ->
+			Gt (x, List.rev (List.map aux hijo))
+			
+	in aux tree
+
+let preorden tree =
+	let rec aux acc = function
+		| Gt (x, hijo) ->
+			let acc' = x :: acc 
+			in List.fold_left aux acc' hijo
+			
+	in aux [] tree
+  
+let preorder tree = List.rev (preorden tree)
+
+let postorden tree =
+	let rec aux acc = function
+		| Gt (x, hijo) ->
+			let acc' = List.fold_left aux acc hijo 
+			in x :: acc'
+			
+	in aux [] tree
+  
+let postorder tree = List.rev (postorden tree)
+(*-----------------------*)
+type 'a g_tree = Gt of 'a * 'a g_tree list
+
+val size : 'a g_tree -> int
+(* devuelve el número de nodos de un g_tree *)
+
+val height : 'a g_tree -> int
+(* devuelve la "altura", como número de niveles, de un g_tree *)
+
+val leaves : 'a g_tree -> 'a list
+(* devuelve las hojas de un g_tree, "de izquierda a derecha" *)
+
+val mirror : 'a g_tree -> 'a g_tree
+(* devuelve la imagen especular de un g_tree *)
+
+val preorder : 'a g_tree -> 'a list
+(* devuelve la lista de nodos de un g_tree en "preorden" *)
+
+val postorder : 'a g_tree -> 'a list
+(* devuelve la lista de nodos de un g_tree en "postorden" *)
+```
+
+Recorrido en anchura de árboles GTree, breadth_first
+
+```ocaml
+open G_tree;;
+
+let rec breadth_first = function
+    Gt (x, []) -> [x]
+	| Gt (x, (Gt (y, t2))::t1) -> x :: breadth_first (Gt (y, t1@t2))
+
+let breadth_first_t arbol =
+	let rec aux acc = function
+		Gt (x, []) -> List.rev (x::acc)
+		| Gt (x, Gt(raiz, ramas)::lista) ->
+			aux (x::acc) (Gt(raiz, List.rev_append (List.rev lista) ramas))
+	in aux [] arbol
+
+let leaf v = Gt(v,[])
+
+let id x = x
+
+let init_tree n = Gt(n, List.rev_map leaf (List.init n id))
+(*---------------------*)
+val breadth_first : 'a G_tree.g_tree -> 'a list
+val breadth_first_t : 'a G_tree.g_tree -> 'a list
+val t2 : int G_tree.g_tree
+```
+
+Árbol binario de búsqueda
+
+```ocaml
+open Bin_tree;;
+
+let insert_tree ord x t =
+	let rec insert = function
+		| Empty -> Node (x, Empty, Empty)
+		| Node (y, left, right) ->
+			if ord x y 
+			then Node (y, insert left, right)
+			else Node (y, left, insert right)
+	in insert t;;
+
+let tsort ord l =
+	inorder (List.fold_left (fun a x -> insert_tree ord x a) Empty l)
+(*-----------------------*)
+val insert_tree :  ('a -> 'a -> bool) -> 'a -> 'a Bin_tree.bin_tree -> 'a Bin_tree.bin_tree
+val tsort : ('a -> 'a -> bool) -> 'a list -> 'a list
+```

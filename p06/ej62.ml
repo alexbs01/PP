@@ -1,5 +1,4 @@
 (* curry : (('a * 'b) -> 'c) -> ('a -> ('b -> 'c)) *)
-
 let curry =  function c -> function a -> function b -> c (a,b)
 let curry c a b = c (a,b)
 

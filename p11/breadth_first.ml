@@ -1,4 +1,3 @@
-
 open G_tree;;
 
 let rec breadth_first = function

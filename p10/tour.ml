@@ -11,7 +11,7 @@ let rec inTree tree (x, y) =
 		then true
 		else inTree t (x, y)
 
-(* Comprueba si un movimiento es legas o no *)
+(* Comprueba si un movimiento es legal o no *)
 let legalMoves visited s tree = 
 	let (x, y) = 
 		List.hd visited

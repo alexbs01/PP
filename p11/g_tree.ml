@@ -1,21 +1,16 @@
-
 type 'a g_tree =
-  Gt of 'a * 'a g_tree list
-;;
+  Gt of 'a * 'a g_tree list;;
 
-(* ------------------------------------- *)
 let rec size = function 
 	Gt (_, []) -> 1
 	| Gt (r, h::t) -> size h + size (Gt (r, t))
 
-(* ------------------------------------- *)
 let size tree =
   let rec aux = function
     | Gt (_, hijo) ->
         1 + List.fold_left (fun acc t -> acc + aux t) 0 hijo
   in aux tree
 
-(* ------------------------------------- *)
 let height tree =
   let rec aux = function
     | Gt (_, hijo) ->
@@ -25,7 +20,6 @@ let height tree =
 		
   in aux tree
 
-(* ------------------------------------- *)
 let leaves tree =
 	let rec aux acc = function
 		| Gt (x, hijo) ->
@@ -35,7 +29,6 @@ let leaves tree =
 			
 	in aux [] tree
 
-(* ------------------------------------- *)
 let mirror tree =
 	let rec aux = function
 		| Gt (x, hijo) ->
@@ -43,7 +36,6 @@ let mirror tree =
 			
 	in aux tree
 
-(* ------------------------------------- *)
 let preorden tree =
 	let rec aux acc = function
 		| Gt (x, hijo) ->
@@ -54,7 +46,6 @@ let preorden tree =
   
 let preorder tree = List.rev (preorden tree)
 
-(* ------------------------------------- *)
 let postorden tree =
 	let rec aux acc = function
 		| Gt (x, hijo) ->
